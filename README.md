@@ -1,9 +1,12 @@
-clone the repository
+install GIT for your OS using the guide:
+
+`https://www.atlassian.com/git/tutorials/install-git`
+
+clone the git repository
 
 `git clone https://gitlab.spd-ukraine.com/rnd-ml/duplicate-finder.git`
 
-
-install python for your operational system using the guide :
+install python for your OS using the guide:
 
 `https://realpython.com/installing-python/`
 
@@ -11,8 +14,16 @@ install library for virtual environments creation:
 
 `pip install virtualenv`
 
-next you have to create virtual environment and install in it all required libraries
+go to the directory with repository
 
+**FOR LINUX AND MACOS**
+cd path/to/repository
+
+**FOR WINDOWS**
+
+cd path\to\repository
+
+next you have to create virtual environment and install in it all required libraries
 
 **FOR LINUX AND MACOS**
 
@@ -42,3 +53,5 @@ activate virtual environment with next command in terminal:
 install requirements from file _requirements.txt_ to virtual environment with next command in terminal:
 
 `pip install -r requirements.txt`
+
+
