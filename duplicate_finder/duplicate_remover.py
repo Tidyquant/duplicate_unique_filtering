@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from Levenshtein import distance as levenshtein_distance
+from difflib import ndiff
 from time import time
 from tqdm import tqdm
 
@@ -78,7 +78,7 @@ class DuplicateRemover:
         rows_number = self.unique_data.shape[0]
         for i in tqdm(range(rows_number - 1)):
             distances = np.array(
-                [levenshtein_distance(self.unique_data[similar_column].values[i],
+                [DuplicateRemover.levenshtein_distance(self.unique_data[similar_column].values[i],
                                       self.unique_data[similar_column].values[j]) for j in
                  range(i + 1, rows_number)])
             matching_indexes = np.where(distances <= threshold)[0]
@@ -92,3 +92,28 @@ class DuplicateRemover:
             clean_df = clean_df.drop(index_list)
 
         return clean_df
+
+    @staticmethod
+    def levenshtein_distance(str_1, str_2):
+        """
+        Function for calculating Levenshtein distance.
+        The Levenshtein distance is a string metric for measuring the difference between two sequences.
+        It is calculated as the minimum number of single-character edits necessary to transform one string into another.
+        :param str_1: first string to compare
+        :param str_2: second string to compare
+        :return distance: Levenshtein distance between two strings.
+        """
+        distance = 0
+        buffer_removed = buffer_added = 0
+        for x in ndiff(str_1, str_2):
+            code = x[0]
+            # Code ? is ignored as it does not translate to any modification
+            if code == ' ':
+                distance += max(buffer_removed, buffer_added)
+                buffer_removed = buffer_added = 0
+            elif code == '-':
+                buffer_removed += 1
+            elif code == '+':
+                buffer_added += 1
+        distance += max(buffer_removed, buffer_added)
+        return distance
