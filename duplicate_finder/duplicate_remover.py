@@ -20,8 +20,8 @@ class DuplicateRemover:
         """
         # Read data from source
         self.data = pd.read_csv(data_path)
-        # Drop rows with missed values
-        self.data = self.data.dropna()
+        # Replace missed values by empty string
+        self.data = self.data.fillna("")
         self.unique_data = None
         self.data_without_duplicates = None
         self.threshold = threshold
