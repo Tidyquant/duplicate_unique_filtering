@@ -5,7 +5,7 @@ from duplicate_remover import DuplicateRemover
 from os import remove
 
 
-class FaceRecognitionStoreTest(unittest.TestCase):
+class DuplicateRemoverTest(unittest.TestCase):
     def setUp(self) -> None:
         self.duplicate_remover = DuplicateRemover("test_data.csv", ".")
 
