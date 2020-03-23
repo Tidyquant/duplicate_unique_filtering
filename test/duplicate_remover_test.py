@@ -3,11 +3,12 @@ import pandas as pd
 
 from duplicate_finder.duplicate_remover import DuplicateRemover
 from os import remove
+from os.path import join
 
 
 class DuplicateRemoverTest(unittest.TestCase):
     def setUp(self) -> None:
-        self.duplicate_remover = DuplicateRemover("test_data.csv", ".")
+        self.duplicate_remover = DuplicateRemover(join("test", "test_data.csv"), ".")
 
     def test_existing_data_remover(self):
         """
