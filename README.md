@@ -23,9 +23,9 @@ pip install -r requirements-unix.txt
 ```
 **FOR WINDOWS**
 ```
-python -m venv path-to-venv-folder
-path-to-venv-folder\Scripts\activate.bat
-pip install -r requirements.txt
+python -m venv venv
+venv\Scripts\activate.bat
+pip install -r requirements-windows.txt
 ```
 **Note** that requirements are made for the last version of python and for 64-bit windows. If you have another system or python go by [link](https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-levenshtein) and change last line of _requirements-windows.txt_ by link for matched file.
 ### 7. After this you can run main script using command line. It contain few arguments which you must passed:
