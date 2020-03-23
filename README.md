@@ -8,7 +8,7 @@ git clone https://gitlab.spd-ukraine.com/rnd-ml/duplicate-finder.git
 ### 3. Install python for your OS using the guide from the [link](https://realpython.com/installing-python).
 ### 4. Install virtual environment library via command line:
 ```
-pip install virtualenv
+pip3 install virtualenv
 ```
 ### 5. Go to the repository via command line:
 ```
@@ -23,8 +23,8 @@ pip install -r requirements.txt
 ```
 **FOR WINDOWS**
 ```
-c:\path\to\installed\python -m venv c:\path\to\venv
-source c:\path\to\venv\venv\bin\activate
+python -m venv venv
+venv\Scripts\activate.bat
 pip install -r requirements.txt
 ```
 ### 7. After this you can run main script using command line. It contain few arguments which you must passed:
