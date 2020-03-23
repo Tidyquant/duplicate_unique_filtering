@@ -12,6 +12,12 @@ class DuplicateRemover:
     """
 
     def __init__(self, data_path, folder_to_save, threshold=2):
+        """
+        Init function for duplicate remover.
+        :param data_path: path to the file with data.
+        :param folder_to_save: path to the folder where the processed file has to be saved.
+        :param threshold: maximum value for returned Levenshtein distance between two samples in data
+        """
         # Read data from source
         self.data = pd.read_csv(data_path)
         # Drop rows with missed values
@@ -22,6 +28,14 @@ class DuplicateRemover:
         self.folder_to_save = folder_to_save
 
     def process(self):
+        """
+        Function for process data and save new data without duplicates.
+        1. Preprocess source data.
+        2. Find unique values in source data.
+        3. Drop duplicate names from source data.
+        4. Drop extra columns.
+        5. Save data without duplicates in names.
+        """
         self.preprocess()
         self.find_unique()
         self.remove_duplicates()
