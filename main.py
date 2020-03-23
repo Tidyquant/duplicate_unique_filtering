@@ -7,7 +7,7 @@ parser = argparse.ArgumentParser(description='Script for find duplicate in data 
 parser.add_argument('data', type=str, required=True, help='Path to the file with data')
 parser.add_argument('threshold', type=int, default=2,
                     help='Maximum value for returned Levenshtein distance between two samples in data')
-parser.add_argument('folder-to-save', type=str, required=True, help='Path(folder) to save new data')
+parser.add_argument('folder-to-save', type=str, required=True, help='Path to the folder where new data will be saved')
 
 # Parse arguments of command line
 args = parser.parse_args()
