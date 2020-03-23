@@ -1,6 +1,6 @@
 import argparse
 
-from duplicate_remover import DuplicateRemover
+from duplicate_finder.duplicate_remover import DuplicateRemover
 
 # Parser of command line arguments
 parser = argparse.ArgumentParser(description='Script for find duplicate in data using Levenshtein distance')

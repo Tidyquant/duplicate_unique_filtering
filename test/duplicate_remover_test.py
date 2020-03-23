@@ -1,7 +1,7 @@
 import unittest
 import pandas as pd
 
-from duplicate_remover import DuplicateRemover
+from duplicate_finder.duplicate_remover import DuplicateRemover
 from os import remove
 
 
