@@ -37,7 +37,6 @@ class DuplicateRemover:
         """
         self.data['full_name'] = self.data["given_name"] + " " + self.data["surname"]
         self.data['find_unique'] = self.data['date_of_birth'] + " " + self.data['sex'] + " " + self.data['full_name']
-        print(f"Numbers of records in source data - {self.data.shape[0]}")
 
     def find_unique(self):
         """
@@ -45,7 +44,6 @@ class DuplicateRemover:
         Print number of unique records in source data.
         """
         self.unique_data = self.data.drop_duplicates(subset="find_unique")
-        print(f"Numbers of unique records in source data - {self.unique_data.shape[0]}")
 
     def remove_duplicates(self):
         """
@@ -54,8 +52,6 @@ class DuplicateRemover:
         """
         start = time()
         self.data_without_duplicates = self.function_for_remove_duplicates("full_name", self.threshold)
-        print(f"Time spent for removing duplicates: {round((time() - start) / 60, 3)} minutes.")
-        print(f"Numbers of different people in source data - {self.data_without_duplicates.shape[0]}")
 
     def function_for_remove_duplicates(self, similar_column='full_name', threshold=2):
         """
