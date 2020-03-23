@@ -23,8 +23,8 @@ pip install -r requirements.txt
 ```
 **FOR WINDOWS**
 ```
-python -m venv venv
-venv\Scripts\activate.bat
+python -m venv path-to-venv-folder
+path-to-venv-folder\Scripts\activate.bat
 pip install -r requirements.txt
 ```
 ### 7. After this you can run main script using command line. It contain few arguments which you must passed:
