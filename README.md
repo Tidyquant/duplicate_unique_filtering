@@ -23,8 +23,8 @@ pip install -r requirements-unix.txt
 ```
 **FOR WINDOWS**
 ```
-python -m venv venv
-venv\Scripts\activate.bat
+python -m venv path-to-venv-folder
+path-to-venv-folder\Scripts\activate.bat
 pip install -r requirements-windows.txt
 ```
 **Note** that requirements are made for the last version of python and for 64-bit windows. If you have another system or python go by [link](https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-levenshtein) and change last line of _requirements-windows.txt_ by link for matched file.
@@ -33,7 +33,7 @@ pip install -r requirements-windows.txt
 - **_folder-to-save_** - folder where new data without duplicates have to be saved;
 - **_threshold (not required parameter)_** - maximum value for returned Levenshtein distance between two samples in data;
 ```
-python main.py -data Data.csv -folder-to-save . -threshold 2
+python main.py -data Data.csv -folder-to-save . -threshold 3
 ```
 ### Also you can run tests using command line:
 ```
