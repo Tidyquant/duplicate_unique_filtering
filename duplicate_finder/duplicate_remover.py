@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 
+from datetime import datetime
 from Levenshtein import distance as levenshtein_distance
 from time import time
 from tqdm import tqdm
@@ -11,7 +12,7 @@ class DuplicateRemover:
     Class for removing duplicates
     """
 
-    def __init__(self, data_path, folder_to_save, threshold=2):
+    def __init__(self, data_path, folder_to_save, threshold=3):
         """
         Init function for duplicate remover.
         :param data_path: path to the file with data.
@@ -40,8 +41,9 @@ class DuplicateRemover:
         self.preprocess()
         self.find_unique()
         self.remove_duplicates()
-        self.data_without_duplicates = self.data_without_duplicates.drop(columns=['full_name', 'find_unique'])
-        self.duplicated_data = self.duplicated_data.drop(columns=['full_name', 'find_unique'])
+        columns_to_drop = ['full_name', 'find_unique', "date_datetime", "duplicated"]
+        self.data_without_duplicates = self.data_without_duplicates.drop(columns=columns_to_drop)
+        self.duplicated_data = self.duplicated_data.drop(columns=columns_to_drop)
         self.data_without_duplicates.to_csv(f"{self.folder_to_save}/uniquedata.csv", index=False)
         self.duplicated_data.to_csv(f"{self.folder_to_save}/duplicateddata.csv", index=False)
 
@@ -68,6 +70,7 @@ class DuplicateRemover:
         Function for removing duplicate names in data.
         Save dataframe with different people from source data in data_without_duplicates field.
         """
+        self.unique_data['date_datetime'] = self.unique_data['date_of_birth'].apply(DuplicateRemover.change_date_type)
         dupl_indexes = []
         rows_number = self.unique_data.shape[0]
         for i in tqdm(range(rows_number - 1)):
@@ -78,9 +81,18 @@ class DuplicateRemover:
             matching_indexes = np.where(distances <= self.threshold)[0]
             matching_indexes = matching_indexes + i + 1
 
-            d_b1 = self.unique_data['date_of_birth'].iloc[i]
+            d_b1 = self.unique_data['date_datetime'].iloc[i]
+            gender = self.unique_data['sex'].iloc[i]
             dupl_indexes += [self.unique_data.index[match] for match in matching_indexes if
-                             self.unique_data['date_of_birth'].iloc[match] == d_b1]
+                             self.unique_data['date_datetime'].iloc[match] == d_b1 and
+                             self.unique_data['sex'].iloc[match] == gender]
         self.data_without_duplicates = self.unique_data.copy()
         self.duplicated_data = self.duplicated_data.append(self.unique_data.loc[dupl_indexes])
         self.data_without_duplicates = self.data_without_duplicates.drop(dupl_indexes)
+
+    @staticmethod
+    def change_date_type(row):
+        try:
+            return datetime.strptime(row, '%m/%d/%Y').date()
+        except ValueError:
+            return ""
