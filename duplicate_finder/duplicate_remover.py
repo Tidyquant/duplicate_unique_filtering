@@ -22,6 +22,7 @@ class DuplicateRemover:
         self.data = pd.read_csv(data_path)
         # Replace missed values by empty string
         self.data = self.data.fillna("")
+        self.duplicated_data = None
         self.unique_data = None
         self.data_without_duplicates = None
         self.threshold = threshold
@@ -40,7 +41,9 @@ class DuplicateRemover:
         self.find_unique()
         self.remove_duplicates()
         self.data_without_duplicates = self.data_without_duplicates.drop(columns=['full_name', 'find_unique'])
-        self.data_without_duplicates.to_csv(f"{self.folder_to_save}/relateddata.csv")
+        self.duplicated_data = self.duplicated_data.drop(columns=['full_name', 'find_unique'])
+        self.data_without_duplicates.to_csv(f"{self.folder_to_save}/uniquedata.csv", index=False)
+        self.duplicated_data.to_csv(f"{self.folder_to_save}/duplicateddata.csv", index=False)
 
     def preprocess(self):
         """
@@ -57,14 +60,15 @@ class DuplicateRemover:
         Function for finding unique values in data.
         Print number of unique records in source data.
         """
-        self.unique_data = self.data.drop_duplicates(subset="find_unique")
+        self.data["duplicated"] = self.data.duplicated(subset="find_unique").astype(int)
+        self.duplicated_data = self.data[self.data["duplicated"] == 1]
+        self.unique_data = self.data[self.data["duplicated"] == 0]
 
     def remove_duplicates(self):
         """
         Function for removing duplicate names in data.
         Print number of different people in source data.
         """
-        start = time()
         self.data_without_duplicates = self.function_for_remove_duplicates("full_name", self.threshold)
 
     def function_for_remove_duplicates(self, similar_column='full_name', threshold=2):
@@ -88,7 +92,7 @@ class DuplicateRemover:
             dupl_indexes += [self.unique_data.index[match] for match in matching_indexes if
                              self.unique_data['date_of_birth'].iloc[match] == d_b1]
         clean_df = self.unique_data.copy()
-        for index_list in dupl_indexes:
-            clean_df = clean_df.drop(index_list)
+        self.duplicated_data = self.duplicated_data.append(self.unique_data.loc[dupl_indexes])
+        clean_df = clean_df.drop(dupl_indexes)
 
         return clean_df
