@@ -50,7 +50,6 @@ class DuplicateRemover:
         Function for preprocess data.
         Merge given_name and surname to validate names.
         Merge [date_of_birth, sex, full_Name] columns to find right unique_values.
-        Print number of records in source data,
         """
         self.data['full_name'] = self.data["given_name"] + " " + self.data["surname"]
         self.data['find_unique'] = self.data['date_of_birth'] + " " + self.data['sex'] + " " + self.data['full_name']
@@ -58,7 +57,7 @@ class DuplicateRemover:
     def find_unique(self):
         """
         Function for finding unique values in data.
-        Print number of unique records in source data.
+        Save dataframe with unique records from source data in unique_data field.
         """
         self.data["duplicated"] = self.data.duplicated(subset="find_unique").astype(int)
         self.duplicated_data = self.data[self.data["duplicated"] == 1]
@@ -67,32 +66,21 @@ class DuplicateRemover:
     def remove_duplicates(self):
         """
         Function for removing duplicate names in data.
-        Print number of different people in source data.
-        """
-        self.data_without_duplicates = self.function_for_remove_duplicates("full_name", self.threshold)
-
-    def function_for_remove_duplicates(self, similar_column='full_name', threshold=2):
-        """
-        Function for process data, remove duplicate people records.
-        :param similar_column: column by which find duplicates in data
-        :param threshold: maximum value for returned Levenshtein distance between two samples in data
-        :return: data without duplicates in similar_column.
+        Save dataframe with different people from source data in data_without_duplicates field.
         """
         dupl_indexes = []
         rows_number = self.unique_data.shape[0]
         for i in tqdm(range(rows_number - 1)):
             distances = np.array(
-                [levenshtein_distance(self.unique_data[similar_column].values[i],
-                                      self.unique_data[similar_column].values[j]) for j in
+                [levenshtein_distance(self.unique_data["full_name"].values[i],
+                                      self.unique_data["full_name"].values[j]) for j in
                  range(i + 1, rows_number)])
-            matching_indexes = np.where(distances <= threshold)[0]
+            matching_indexes = np.where(distances <= self.threshold)[0]
             matching_indexes = matching_indexes + i + 1
 
             d_b1 = self.unique_data['date_of_birth'].iloc[i]
             dupl_indexes += [self.unique_data.index[match] for match in matching_indexes if
                              self.unique_data['date_of_birth'].iloc[match] == d_b1]
-        clean_df = self.unique_data.copy()
+        self.data_without_duplicates = self.unique_data.copy()
         self.duplicated_data = self.duplicated_data.append(self.unique_data.loc[dupl_indexes])
-        clean_df = clean_df.drop(dupl_indexes)
-
-        return clean_df
+        self.data_without_duplicates = self.data_without_duplicates.drop(dupl_indexes)
