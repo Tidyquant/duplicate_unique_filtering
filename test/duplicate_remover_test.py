@@ -8,7 +8,7 @@ from os.path import join
 
 class DuplicateRemoverTest(unittest.TestCase):
     def setUp(self) -> None:
-        self.duplicate_remover = DuplicateRemover(join("test", "test_data.csv"), ".")
+        self.duplicate_remover = DuplicateRemover(join("test", "test_data_init.csv"), ".")
 
     def test_existing_data_remover(self):
         """
@@ -35,7 +35,7 @@ class DuplicateRemoverTest(unittest.TestCase):
         Test if preprocess method work correctly.
         """
         self.duplicate_remover.preprocess()
-        self.assertEqual(23, self.duplicate_remover.data.shape[0])
+        self.assertEqual(18, self.duplicate_remover.data.shape[0])
 
     def test_existing_find_unique_method(self):
         """
@@ -50,7 +50,7 @@ class DuplicateRemoverTest(unittest.TestCase):
         """
         self.duplicate_remover.preprocess()
         self.duplicate_remover.find_unique()
-        self.assertEqual(22, self.duplicate_remover.unique_data.shape[0])
+        self.assertEqual(16, self.duplicate_remover.unique_data.shape[0])
 
     def test_existing_removing_duplicate_method(self):
         """
@@ -67,7 +67,7 @@ class DuplicateRemoverTest(unittest.TestCase):
         self.duplicate_remover.preprocess()
         self.duplicate_remover.find_unique()
         self.duplicate_remover.remove_duplicates()
-        self.assertEqual(21, self.duplicate_remover.data_without_duplicates.shape[0])
+        self.assertEqual(14, self.duplicate_remover.data_without_duplicates.shape[0])
 
     def test_existing_process_method(self):
         """
@@ -81,7 +81,12 @@ class DuplicateRemoverTest(unittest.TestCase):
         """
         self.duplicate_remover.process()
 
-        saved_data = pd.read_csv("relateddata.csv")
+        unique_data_process = pd.read_csv("uniquedata.csv").values.tolist()
+        duplicated_data_process = pd.read_csv("duplicateddata.csv").values.tolist()
 
-        self.assertEqual(21, saved_data.shape[0])
-        remove("relateddata.csv")
+        unique_data = pd.read_csv(join("test", "uniquedata.csv")).values.tolist()
+        duplicated_data = pd.read_csv(join("test", "duplicateddata.csv")).values.tolist()
+        self.assertListEqual(unique_data, unique_data_process)
+        self.assertListEqual(duplicated_data, duplicated_data_process)
+        remove("uniquedata.csv")
+        remove("duplicateddata.csv")
